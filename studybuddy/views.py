@@ -1,5 +1,5 @@
 from http.client import HTTPResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
@@ -9,7 +9,9 @@ from django import forms
 from django.contrib import messages
 
 from .models import Profile, Course
+from .models import StudySession
 from .forms import ProfileForm
+from .forms import SessionForm
 from django.contrib.auth import logout
 
 
@@ -44,6 +46,31 @@ def register(request):
     }
        
     return render(request, 'registerProfile.html', context)
+
+
+def session(request):
+    if request.method == 'POST':
+        form = SessionForm(request.POST)
+
+        if form.is_valid():
+            session = StudySession()
+            #session.users = request.user.objects.values_list('username', flat='True')
+            session.save()
+            #session.users.add(request.POST.get('users'))
+            temp = request.POST.getlist('users')
+            #session.m2mfield.add(*temp)
+            session.users.add(*temp)
+            #return HttpResponse(request.POST.items())
+            session.date = request.POST.get('date')
+            session.time = request.POST.get('time')
+            session.location = request.POST.get('location')
+            session.subject = request.POST.get('subject')
+            session.save()
+            return render(request, 'sessions.html', {'session': session})
+    else:
+        form = SessionForm()
+
+    return render(request, 'newSession.html', {'form': form})
 
 def profile(request):
     theUser = Profile.objects.get(user_id=request.user.id)
