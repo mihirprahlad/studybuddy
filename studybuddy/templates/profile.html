@@ -3,6 +3,7 @@
 <h1>Username: {{ user.user }}</h1>
 <h1>About: {{ user.about }}</h1>
 <h1>Major: {{ user.major }}</h1>
+<h1>Email: {{ user.user.email }}</h1>
 <h1>Courses: </h1>
 {% for i in user.courses.all %}
 <li>
