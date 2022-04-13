@@ -16,9 +16,33 @@
           </li>
           <li class="nav-item"><a class="nav-link px-3 px-3" href="{% url 'calendar' %}" color="blue">Calender</a>
 
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle px-3 px-3" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" class="capitalize">
-               <i class="fa fa-fw fa-user" color="blue" ></i> User: {{ user.username }} <span class="caret" color="blue"></span> 
+<div class="d-flex justify-content-center">
+    <h1 class="display-1 title">Study Buddy</h1>
+</div>
+<div>
+    <nav class="navbar navbar-expand-sm navbar-light d-flex justify-content-between bg-light">
+        <a href="{% url 'home' %}" class="nav-link active links">
+            Home
+        </a>
+        <a href="{% url 'profile' %}" class="nav-link active links">
+            Profile
+        </a>
+        <a href="{% url 'addCourses' %}" class="nav-link active links">
+            Add Courses
+        </a>
+        <a href="{% url 'calendar' %}" class="nav-link active links">
+            Calendar
+        </a>
+        <a href="{% url 'buddies' %}" class="nav-link active links">
+            Find Buddies
+        </a>
+        <a href="{% url 'logout' %}" class="nav-link active links">
+            Logout
+        </a>
+        <!-- <li class="nav-item dropdown"> -->
+        <div class="dropdown show">
+            <a class="nav-link active links dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+               User: {{ user.username }}
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               <li><a class="dropdown-item" href="/logout" color="blue">Log Out</a></li>

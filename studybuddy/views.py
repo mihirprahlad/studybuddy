@@ -7,11 +7,14 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django import forms 
 from django.contrib import messages
+# import pytz
+from django.utils import timezone
 
 from .models import Profile, Course
 from .forms import ProfileForm
 from django.contrib.auth import logout
 
+now = timezone.now()
 
 def home(request):
     return render(request, 'home.html')
@@ -45,6 +48,67 @@ def register(request):
        
     return render(request, 'registerProfile.html', context)
 
+
+def session(request):
+    print("event")
+    if request.method == 'POST':
+        form = SessionForm(request.POST)
+
+        if form.is_valid():
+            session = StudySession()
+            #session.users = request.user.objects.values_list('username', flat='True')
+            session.save()
+            #session.users.add(request.POST.get('users'))
+            temp = request.POST.getlist('users')
+            #session.m2mfield.add(*temp)
+            session.users.add(*temp)
+            #return HttpResponse(request.POST.items())
+            session.date = request.POST.get('date')
+            session.time = request.POST.get('time')
+            session.location = request.POST.get('location')
+            session.subject = request.POST.get('subject')
+            session.save()
+            return render(request, 'sessions.html', {'session': session})
+    else:
+        form = SessionForm()
+
+    return render(request, 'newSession.html', {'form': form})
+
+def event(request):
+    print("event")
+    if request.method == 'POST':
+        form = SessionForm(request.POST)
+
+        if form.is_valid():
+            print(now)
+            session = StudySession()
+            list_users = request.POST.getlist('users')
+            event = {
+                'summary': request.POST.get('summary'),
+                'location': request.POST.get('location'),
+                'description': request.POST.get('description'),
+                'start': {
+                    'dateTime': request.POST.get('startTime'),
+                    'timeZone': 'America/New_York', 
+                },
+                'end': {
+                    'dateTime': request.POST.get('endTime'),
+                    'timeZone': 'America/New_York', 
+                },
+                'attendees': [
+                    {'email': list_users[0].email}
+                ]
+            }
+            event = service.events().insert(calendar='c_8gg3c3rg0uee6rt83ajmm6c3v0@group.calendar.google.com', body=event).execute()
+            print('Event created %s' % (event.get('htmlLink')))
+    else:
+        form = SessionForm()
+
+    
+    events.insert()
+    # return render(request, 'newSession.html', {'form': form})
+
+
 def profile(request):
     theUser = Profile.objects.get(user_id=request.user.id)
     return render(request, 'profile.html', {"user" : theUser})
@@ -52,6 +116,7 @@ def profile(request):
 def calendar(request):
     return render(request, 'calendar.html')
 def addCourses(request):
+    print("courses")
     allCourses = Course.objects.all() 
     theUser = Profile.objects.get(user_id=request.user.id)
     courseValid = True

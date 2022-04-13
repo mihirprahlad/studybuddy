@@ -7,6 +7,16 @@ class Profile(models.Model):
     major = models.CharField(max_length=50); 
     courses = models.ManyToManyField('Course', blank=True)
 
+class StudySession(models.Model):
+    users = models.ManyToManyField(User)
+    time = models.CharField(max_length=10)
+    date = models.CharField(max_length=10)
+    location = models.CharField(max_length=50)
+    subject = models.CharField(max_length=10)
+    summary = models.CharField(max_length=10)
+    description = models.CharField(max_length=100)
+    startTime = models.DateTimeField()
+    endTime = models.DateTimeField()
 
 class Course(models.Model):
     courseAbbv = models.CharField(max_length=5, default='')
@@ -20,3 +30,5 @@ class Course(models.Model):
 # class Event(models.Model):
 #     date = models.DateField()
 #     partners = models.ManyToManyField('User', blank=True)
+
+
