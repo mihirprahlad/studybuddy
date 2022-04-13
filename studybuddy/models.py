@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    about = models.CharField(max_length=300); 
-    major = models.CharField(max_length=50); 
+    about = models.CharField(max_length=300)
+    major = models.CharField(max_length=50)
     courses = models.ManyToManyField('Course', blank=True)
 
 class StudySession(models.Model):
@@ -30,5 +30,4 @@ class Course(models.Model):
 # class Event(models.Model):
 #     date = models.DateField()
 #     partners = models.ManyToManyField('User', blank=True)
-
 

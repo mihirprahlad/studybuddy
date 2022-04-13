@@ -1,5 +1,5 @@
 from http.client import HTTPResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
@@ -11,7 +11,9 @@ from django.contrib import messages
 from django.utils import timezone
 
 from .models import Profile, Course
+from .models import StudySession
 from .forms import ProfileForm
+from .forms import SessionForm
 from django.contrib.auth import logout
 
 now = timezone.now()
@@ -115,6 +117,7 @@ def profile(request):
 
 def calendar(request):
     return render(request, 'calendar.html')
+
 def addCourses(request):
     print("courses")
     allCourses = Course.objects.all() 
@@ -189,11 +192,3 @@ def findBuddies(request):
     }
     return render(request, 'findBuddies.html', context)
 
-
-# class ProfileList(generic.ListView):
-#     model = Profile
-#     context_object_name = 'profileList'
-#     template_name = 'findBuddies.html'
-
-#     def get_queryset(self):
-#         return Profile.objects.all()
