@@ -10,7 +10,8 @@ class ProfileForm(ModelForm):
 class SessionForm(ModelForm):
     class Meta:
         model = StudySession
-        fields = ['users', 'date', 'time', 'location', 'subject','summary','description', 'startTime', 'endTime']
+        #fields = ['users', 'date', 'time', 'location', 'subject','summary','description', 'startTime', 'endTime']
+        fields = ['users', 'location', 'subject','description','startTime', 'endTime']
 
 # class EventForm(ModelForm):
 #      class Meta:
