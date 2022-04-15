@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime    
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -10,14 +9,14 @@ class Profile(models.Model):
 
 class StudySession(models.Model):
     users = models.ManyToManyField(User)
-    #time = models.CharField(max_length=10, default='')
-    #date = models.CharField(max_length=10, default='')
-    location = models.CharField(max_length=50, default='')
-    subject = models.CharField(max_length=10, default='')
-    #summary = models.CharField(max_length=10, default='')
-    description = models.CharField(max_length=100,default='')
-    startTime = models.DateTimeField(blank=True, null=True)
-    endTime = models.DateTimeField(blank=True, null=True)
+    time = models.CharField(max_length=10)
+    date = models.CharField(max_length=10)
+    location = models.CharField(max_length=50)
+    subject = models.CharField(max_length=10)
+    summary = models.CharField(max_length=10)
+    description = models.CharField(max_length=100)
+    startTime = models.DateTimeField()
+    endTime = models.DateTimeField()
 
 class Course(models.Model):
     courseAbbv = models.CharField(max_length=5, default='')
