@@ -11,6 +11,7 @@ from django.contrib import messages
 from .models import Profile, Course, StudySession, MessageTwo
 from .forms import EditProfileForm, ProfileForm, SessionForm, MessageForm
 from django.contrib.auth import logout
+from .calendar_API import test_calendar
 
 
 def home(request):
@@ -220,3 +221,9 @@ def editProfile(request):
         'form': form
     }
     return render(request, 'editProfile.html', context)
+
+
+def demo(request):
+    results = test_calendar()
+    context = {"results": results}
+    return render(request, 'demo.html', context)

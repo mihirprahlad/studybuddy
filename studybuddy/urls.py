@@ -31,10 +31,10 @@ urlpatterns = [
     path('sendmessage/', views.send_message, name="send_message"),
     path('mymessages/', views.my_messages, name="my_messages"),
     path('profile/', views.profile, name="profile"),
-    path('calendar/', views.calendar, name="calendar"),
     path('findBuddies/', views.findBuddies, name="buddies"),
     path('addCourses/', views.addCourses, name="addCourses"),
     path('logout/', views.logOut, name="logout"),
     path('editProfile/', views.editProfile, name="editProfile"),
+    path('demo/', views.demo, name='demo'),
 ]
 urlpatterns += staticfiles_urlpatterns()
