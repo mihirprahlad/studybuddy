@@ -96,11 +96,9 @@ def session(request):
             new_session.save()
 
             users = Profile.objects.filter().all()
-            emails = []
-            for member in new_session.users:
-                for person in Profile:
-                    if member.username == person.user.username:
-                        emails.append(person.user.email)
+            names = []
+            for member in new_session.users.all:
+                    emails.append(member.username)
             event = {
                 'summary': request.POST.get('subject') + " Study Session",
                 'location': request.POST.get('location'),
@@ -119,7 +117,7 @@ def session(request):
                 #     {'email': 'lpage@example.com'},
                 #     {'email': 'sbrin@example.com'},
                 # ],
-                # 'attendees': new_session.users,
+                'attendees': names,
                 'reminders': {
                     'useDefault': False,
                     'overrides': [
@@ -128,8 +126,8 @@ def session(request):
                     ],
                 },
             }
-            event = service.events().insert(calendarId='primary', body=event).execute()
-            print('Event created: %s' % (event.get('htmlLink')))
+            service.events().insert(calendarId=calendar_id, body=event).execute()
+            # print('Event created: %s' % (event.get('htmlLink')))
             return HttpResponseRedirect(reverse('my_sessions'))
 
     else:
