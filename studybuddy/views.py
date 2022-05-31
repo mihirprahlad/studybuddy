@@ -32,7 +32,7 @@ service = build("calendar", "v3", credentials=credentials)
 result = service.calendarList().list().execute()
 result['items'][0]
 
-calendar_id = result['items'][0]['id']
+calendar_id = 'c_ckbu3tqrbi2k276rinrqfo89eo@group.calendar.google.com'
 result = service.events().list(calendarId=calendar_id, timeZone="America/New_York").execute()
 result['items'][0]
 
@@ -115,9 +115,10 @@ def session(request):
                 new_session.end_date = request.POST.get('end_date')
                 new_session.save()
 
-                names = []
+                emails = []
                 for member in new_session.users.all():
-                        names.append(member.username)
+                    email = {'email': member.email}
+                    emails.append(email)
                 event = {
                     'summary': request.POST.get('subject') + " Study Session",
                     'location': request.POST.get('location'),
@@ -136,7 +137,7 @@ def session(request):
                     #     {'email': 'lpage@example.com'},
                     #     {'email': 'sbrin@example.com'},
                     # ],
-                    'attendees': names,
+                    'attendees': emails,
                     'reminders': {
                         'useDefault': False,
                         'overrides': [
@@ -145,7 +146,8 @@ def session(request):
                         ],
                     },
                 }
-                service.events().insert(calendarId=calendar_id, body=event).execute()
+                service.events().insert(calendarId='primary', body=event).execute()
+                service.events().insert(calendarId='calendar_id', body=event).execute()
                 # print('Event created: %s' % (event.get('htmlLink')))
                 return HttpResponseRedirect(reverse('my_sessions'))
 
@@ -243,13 +245,20 @@ def profile(request):
     return render(request, 'profile.html', {"user" : theUser})
 
 def calendar(request):
+    userEmail = request.user.email
+    atLocation = userEmail.index('@')
+    userSlug = userEmail[0:atLocation]
+    emailDomain = userEmail[atLocation + 1:]
+    url = "https://calendar.google.com/calendar/embed?src=" + userSlug + "%40" + emailDomain + "&ctz=America%2FNew_York"
+    print(url)
+
     result = service.calendarList().list().execute()
     result['items'][0]
     calendar_id = result['items'][0]['id']
     result = service.events().list(calendarId=calendar_id,
                                    timeZone="America/New_York").execute()
     result['items'][0]
-    return render(request, 'calendar.html')
+    return render(request, 'calendar.html', {'url': url})
 
 def addCourses(request):
     if not request.user.is_authenticated or not (Profile.objects.filter(user_id=request.user.id)).exists():
